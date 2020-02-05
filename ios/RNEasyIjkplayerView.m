@@ -7,7 +7,7 @@
 //
 
 #import "RNEasyIjkplayerView.h"
-#import <IJKMediaFramework/IJKMediaFramework.h>
+#import <IJKMediaFrameworkWithSSL/IJKMediaFrameworkWithSSL.h>
 
 @interface RNEasyIjkplayerView()
 

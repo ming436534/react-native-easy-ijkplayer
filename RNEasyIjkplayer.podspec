@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.version      = "1.0.0"
   s.summary      = "RNEasyIjkplayer"
   s.description  = <<-DESC
-                  RNEasyIjkplayer
+                  IJKPlayer for React Native
                    DESC
   s.homepage     = ""
   s.license      = "MIT"
@@ -12,11 +12,13 @@ Pod::Spec.new do |s|
   s.author             = { "author" => "author@domain.cn" }
   s.platform     = :ios, "7.0"
   s.source       = { :git => "https://github.com/author/RNEasyIjkplayer.git", :tag => "master" }
-  s.source_files  = "RNEasyIjkplayer/**/*.{h,m}"
+  s.source_files  = "ios/**/*.{h,m}"
+  s.homepage = "https://github.com/ming436534/react-native-easy-ijkplayer.git"
   s.requires_arc = true
 
 
   s.dependency "React"
+  s.dependency 'ijkplayerssl', '~> 1.1.3'
   #s.dependency "others"
 
 end

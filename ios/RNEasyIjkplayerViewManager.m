@@ -18,12 +18,12 @@
     RCT_EXPORT_MODULE(RNEasyIjkplayerView)
     // RNTMapManager.m
 
-    RCT_EXPORT_VIEW_PROPERTY(onPrepared, RCTBubblingEventBlock)
-    RCT_EXPORT_VIEW_PROPERTY(onProgressUpdate, RCTBubblingEventBlock)
-    RCT_EXPORT_VIEW_PROPERTY(onLoadProgressUpdate, RCTBubblingEventBlock)
-    RCT_EXPORT_VIEW_PROPERTY(onInfo, RCTBubblingEventBlock)
-    RCT_EXPORT_VIEW_PROPERTY(onComplete, RCTBubblingEventBlock)
-    RCT_EXPORT_VIEW_PROPERTY(onError, RCTBubblingEventBlock)
+    RCT_EXPORT_VIEW_PROPERTY(onPrepared, RCTDirectEventBlock)
+    RCT_EXPORT_VIEW_PROPERTY(onProgressUpdate, RCTDirectEventBlock)
+    RCT_EXPORT_VIEW_PROPERTY(onLoadProgressUpdate, RCTDirectEventBlock)
+    RCT_EXPORT_VIEW_PROPERTY(onInfo, RCTDirectEventBlock)
+    RCT_EXPORT_VIEW_PROPERTY(onComplete, RCTDirectEventBlock)
+    RCT_EXPORT_VIEW_PROPERTY(onError, RCTDirectEventBlock)
 
     RCT_CUSTOM_VIEW_PROPERTY(options, NSDictionary, RNEasyIjkplayerView){
         

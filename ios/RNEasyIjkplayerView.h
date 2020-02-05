@@ -18,12 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
     @property(nonatomic,strong, readwrite) NSNumber *duration;
     @property(nonatomic,strong, readwrite) NSDictionary *size;
 
-    @property(nonatomic, copy) RCTBubblingEventBlock onPrepared;
-    @property(nonatomic, copy) RCTBubblingEventBlock onProgressUpdate;
-    @property(nonatomic, copy) RCTBubblingEventBlock onLoadProgressUpdate;
-    @property(nonatomic, copy) RCTBubblingEventBlock onInfo;
-    @property(nonatomic, copy) RCTBubblingEventBlock onError;
-    @property(nonatomic, copy) RCTBubblingEventBlock onComplete;
+    @property(nonatomic, copy) RCTDirectEventBlock onPrepared;
+    @property(nonatomic, copy) RCTDirectEventBlock onProgressUpdate;
+    @property(nonatomic, copy) RCTDirectEventBlock onLoadProgressUpdate;
+    @property(nonatomic, copy) RCTDirectEventBlock onInfo;
+    @property(nonatomic, copy) RCTDirectEventBlock onError;
+    @property(nonatomic, copy) RCTDirectEventBlock onComplete;
 
     @property (nonatomic, strong) NSThread *progressUpdateThread;
     @property (nonatomic, strong) NSTimer *progressUpdateTimer;
