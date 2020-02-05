@@ -33,9 +33,9 @@ public class RNEasyIjkplayerModule extends ReactContextBaseJavaModule {
         int  duration = (int) RNEasyIjkplayerView.mDuration;
         Log.i("IJKModule",""+duration);
         if(duration != 0 ){
-            callback.invoke(false,duration);
+            callback.invoke(false, duration);
         }else{
-            callback.invoke(true,duration);
+            callback.invoke(true, duration);
         }
     }
 

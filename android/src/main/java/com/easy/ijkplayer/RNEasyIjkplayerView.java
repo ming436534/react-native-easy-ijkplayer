@@ -248,4 +248,10 @@ public class RNEasyIjkplayerView extends SurfaceView implements LifecycleEventLi
         mIjkPlayer.release();
         mHandler.removeCallbacks(progressUpdateRunnable);
     }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        onHostDestroy();
+    }
 }
