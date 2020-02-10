@@ -117,7 +117,7 @@
     }
 
     -(void)didMoveToWindow{
-        if([_autoPlay compare:[NSNumber numberWithInt:1]] == NSOrderedSame){
+        if (self.window != NULL && [_autoPlay compare:[NSNumber numberWithInt:1]] == NSOrderedSame){
             NSLog(@"");
             [self play];
         }
@@ -196,8 +196,25 @@
     }
 
     -(void)mediaPlayerLoadStateDidChange:(NSNotification*)notifacation{
+        NSString* loadState = @"playable";
+        switch (_player.loadState) {
+            case IJKMPMovieLoadStateStalled:
+                loadState = @"stalled";
+                break;
+            case IJKMPMovieLoadStatePlayable:
+                loadState = @"playable";
+                break;
+            case IJKMPMovieLoadStatePlaythroughOK:
+                loadState = @"playthroughOK";
+                break;
+            case IJKMPMovieLoadStateUnknown:
+                loadState = @"unknown";
+                break;
+            default:
+                break;
+        }
         if(self.onLoadProgressUpdate){
-            self.onLoadProgressUpdate(@{@"bufferingProgress":@(_player.bufferingProgress)});
+            self.onLoadProgressUpdate(@{@"loadState":loadState, @"bufferingProgress":@(_player.bufferingProgress), @"currentPlaybackTime": @(_player.currentPlaybackTime)});
         }
     }
 
@@ -225,6 +242,14 @@
         [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerPlaybackStateDidChangeNotification object:_player];
         [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerLoadStateDidChangeNotification object:_player];
         [[NSNotificationCenter defaultCenter]removeObserver:self name:IJKMPMoviePlayerDidSeekCompleteNotification object:_player];
+    }
+
+    -(void)releasePlayer {
+        [self removeMovieNotificationObservers];
+        if(_player){
+            [_player stop];
+            _player = nil;
+        }
     }
 
     -(void)dealloc{

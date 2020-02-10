@@ -4,7 +4,8 @@ import {
     StyleSheet, ActivityIndicator,
     requireNativeComponent,
     UIManager, findNodeHandle,
-    NativeModules, NativeEventEmitter
+    NativeModules, NativeEventEmitter,
+    Platform,
 } from "react-native"
 import PropTypes from 'prop-types'
 
@@ -93,6 +94,20 @@ class IJKPlayerView extends Component {
         )
     }
 
+    releasePlayer = () => {
+        if (Platform.OS === 'ios') {
+            UIManager.dispatchViewManagerCommand(
+                findNodeHandle(this.ref),
+                UIManager.getViewManagerConfig('RNEasyIjkplayerView').Commands.releasePlayer,
+                null,
+            )
+        }
+    }
+
+    componentWillUnmount() {
+        this.releasePlayer();
+    }
+
     /**
      *
      * @param callback
@@ -138,10 +153,10 @@ class IJKPlayerView extends Component {
         })
     }
 
-    _onLoadProgressUpdate = ({ nativeEvent: { loadProgress } }) => {
-        console.log('on loadProgressUpdate:', loadProgress)
+    _onLoadProgressUpdate = ({ nativeEvent }) => {
+        console.log('on loadProgressUpdate:', nativeEvent)
         const { onLoadProgressUpdate } = this.props
-        onLoadProgressUpdate && onLoadProgressUpdate(loadProgress)
+        onLoadProgressUpdate && onLoadProgressUpdate(nativeEvent)
     }
 
     _onInfo = ({ nativeEvent: { info } }) => {

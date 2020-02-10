@@ -68,6 +68,17 @@
         }];
     }
 
+    RCT_EXPORT_METHOD(releasePlayer:(nonnull NSNumber*) reactTag){
+        [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+            RNEasyIjkplayerView *view =(RNEasyIjkplayerView *) viewRegistry[reactTag];
+            if (!view || ![view isKindOfClass:[RNEasyIjkplayerView class]]) {
+                RCTLogError(@"Cannot find NativeView with tag #%@", reactTag);
+                return;
+            }
+            [view releasePlayer];
+        }];
+    }
+
 
     RCT_EXPORT_METHOD(seekTo:(nonnull NSNumber*) reactTag time:(NSInteger) time ){
         [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
@@ -123,5 +134,4 @@
         
         return view;
     }
-
 @end
