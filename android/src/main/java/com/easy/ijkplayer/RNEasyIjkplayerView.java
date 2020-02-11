@@ -49,6 +49,7 @@ public class RNEasyIjkplayerView extends SurfaceView implements LifecycleEventLi
             int mCurrProgress = (int) Math.ceil((currProgress * 1.0f)/1000);
             WritableMap data = new WritableNativeMap();
             data.putInt("progress", mCurrProgress);
+            sendEvent(NAME_PROGRESS_UPDATE_EVENT, data);
             mHandler.postDelayed(progressUpdateRunnable, PROGRESS_UPDATE_INTERVAL_MILLS);
         }
     };
@@ -190,7 +191,6 @@ public class RNEasyIjkplayerView extends SurfaceView implements LifecycleEventLi
             public void onCompletion(IMediaPlayer iMediaPlayer) {
                 dispatchInfoEvent(0, "complete");
                 sendEvent(NAME_COMPLETE_EVENT, "complete", "1");
-                stop();
             }
         });
     }
