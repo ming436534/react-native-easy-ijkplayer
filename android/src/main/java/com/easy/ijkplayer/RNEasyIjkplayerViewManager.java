@@ -43,12 +43,12 @@ public class RNEasyIjkplayerViewManager extends SimpleViewManager<FrameLayout> {
     @Nonnull
     @Override
     protected FrameLayout createViewInstance(@Nonnull ThemedReactContext reactContext) {
-        ijkPlayerView = new RNEasyIjkplayerView(reactContext);
         ViewGroup.LayoutParams framelayout_params =
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);
         FrameLayout mFrameLayout = new FrameLayout(reactContext);
         mFrameLayout.setLayoutParams(framelayout_params);
+        ijkPlayerView = new RNEasyIjkplayerView(reactContext, mFrameLayout);
         mFrameLayout.addView(ijkPlayerView);
         return mFrameLayout;
     }
@@ -158,6 +158,11 @@ public class RNEasyIjkplayerViewManager extends SimpleViewManager<FrameLayout> {
                         MapBuilder.of(
                                 "phasedRegistrationNames",
                                 MapBuilder.of("bubbled", "onProgressUpdate")))
+                .put(
+                        "onLoadProgressUpdate",
+                        MapBuilder.of(
+                                "phasedRegistrationNames",
+                                MapBuilder.of("bubbled", "onLoadProgressUpdate")))
                 .build();
     }
 

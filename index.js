@@ -9,9 +9,6 @@ import {
 } from "react-native"
 import PropTypes from 'prop-types'
 
-const defaultIndicatorSize = 16
-const { width: D_WIDTH } = Dimensions.get('window')
-
 class IJKPlayerView extends Component {
     static propTypes = {
         showIndicator: PropTypes.bool,
@@ -30,33 +27,6 @@ class IJKPlayerView extends Component {
             indicatorTop: null,
             showIndicator: false,
         }
-    }
-
-    static getDerivedStateFromProps(props, state) {
-        const { style,showIndicator } = props
-        let width, height
-        if (style) {
-            width = style.width
-            height = style.height
-        }
-        let videoWrapperWidth = width || D_WIDTH
-        let videoWrapperHeight = height || D_WIDTH * 0.7
-        const indicatorLeft = videoWrapperWidth / 2 - defaultIndicatorSize / 2
-        const indicatorTop = videoWrapperHeight / 2 - defaultIndicatorSize / 2
-        if (
-            indicatorLeft !== state.indicatorLeft
-            || indicatorTop !== state.indicatorTop
-            || showIndicator !== state.showIndicator
-        ) {
-            return {
-                indicatorLeft,
-                indicatorTop,
-                videoWrapperWidth,
-                videoWrapperHeight,
-                showIndicator,
-            }
-        }
-        return null
     }
 
     play = () => {
@@ -125,32 +95,10 @@ class IJKPlayerView extends Component {
         onProgressUpdate && onProgressUpdate(progress)
     }
 
-    _onPrepared = (event) => {
+    _onPrepared = ({nativeEvent}) => {
         console.log('on prepared')
         const { onPrepared } = this.props
-        onPrepared && onPrepared(event)
-
-        this.setState({ showIndicator: false })
-        this.getSize((err, size) => {
-            if (!err) {
-                const { videoWrapperHeight, videoWrapperWidth } = this.state
-                if (size.width <= size.height) { //宽度小于高度, 左右留黑边
-                    let videoWidth = size.width / size.height * videoWrapperHeight
-                    this.setState({
-                        videoWidth,
-                        videoHeight: videoWrapperHeight,
-                        videoLeft: (videoWrapperWidth - videoWidth) / 2,
-                    })
-                } else { //宽度大于高度, 上下留黑边
-                    let videoHeight = size.height / size.width * videoWrapperWidth
-                    this.setState({
-                        videoHeight,
-                        videoWidth: videoWrapperWidth,
-                        videoTop: (videoWrapperHeight - videoHeight) / 2,
-                    })
-                }
-            }
-        })
+        onPrepared && onPrepared(nativeEvent)
     }
 
     _onLoadProgressUpdate = ({ nativeEvent }) => {
@@ -159,10 +107,10 @@ class IJKPlayerView extends Component {
         onLoadProgressUpdate && onLoadProgressUpdate(nativeEvent)
     }
 
-    _onInfo = ({ nativeEvent: { info } }) => {
-        console.log('on Info:', info)
+    _onInfo = ({ nativeEvent }) => {
+        console.log('on Info:', nativeEvent)
         const { onInfo } = this.props
-        onInfo && onInfo(info)
+        onInfo && onInfo(nativeEvent)
     }
 
     _onError = ({ nativeEvent: { error } }) => {
@@ -177,21 +125,9 @@ class IJKPlayerView extends Component {
     }
 
     render() {
-        const {
-            videoWrapperWidth, videoWrapperHeight, videoHeight, videoWidth, videoLeft, videoTop,
-            indicatorLeft, indicatorTop, showIndicator
-        } = this.state
-        return <View style={{ ...styles.container, width: videoWrapperWidth, height: videoWrapperHeight }}>
+        return (
             <IJKPlayer
-                style={{
-                    ...styles.video,
-                    width: videoWidth,
-                    height: videoHeight,
-                    left: videoLeft ? videoLeft : 0,
-                    top: videoTop ? videoTop : 0
-                }}
                 {...this.props}
-
                 ref={ref => this.ref = ref}
                 onPrepared={this._onPrepared}
                 onProgressUpdate={this._onProgressUpdate}
@@ -200,26 +136,10 @@ class IJKPlayerView extends Component {
                 onError={this._onError}
                 onComplete={this._onComplete}
             />
-            <ActivityIndicator
-                style={{ ...styles.indicator, left: indicatorLeft, top: indicatorTop }}
-                size={'small'}
-                animating={showIndicator}
-            />
-        </View>
+        )
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        position: 'relative',
-    },
-    video: {
-        position: 'absolute',
-    },
-    indicator: {
-        position: 'absolute',
-    },
-})
 var IJKPlayer = requireNativeComponent('RNEasyIjkplayerView', IJKPlayerView)
 
 export default IJKPlayerView
