@@ -38,6 +38,7 @@ public class RNEasyIjkplayerView extends SurfaceView implements LifecycleEventLi
     private View parentView;
     private Handler mHandler = new Handler();
     boolean isProgressUpdateRunnableRunning = false;
+    String header;
     private Runnable progressUpdateRunnable = new Runnable() {
         @Override
         public void run() {
@@ -292,9 +293,17 @@ public class RNEasyIjkplayerView extends SurfaceView implements LifecycleEventLi
         return false;
     }
 
+    public void setHeader(String headerString) {
+        if (mIjkPlayer != null) mIjkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "headers", headerString != null ? headerString : "");
+        header = headerString;
+    }
+
     public void setDataSource(String url) {
         try {
             if (mIjkPlayer == null) initIjkMediaPlayer();
+            if (header != null) {
+                mIjkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "headers", header != null ? header : "");
+            }
             mIjkPlayer.setDataSource(url);
             mCurrUrl = url;
         } catch (IOException e) {

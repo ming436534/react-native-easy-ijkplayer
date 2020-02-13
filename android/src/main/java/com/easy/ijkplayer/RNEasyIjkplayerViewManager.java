@@ -9,16 +9,21 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.views.view.ReactViewGroup;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 
 public class RNEasyIjkplayerViewManager extends SimpleViewManager<FrameLayout> {
@@ -76,8 +81,25 @@ public class RNEasyIjkplayerViewManager extends SimpleViewManager<FrameLayout> {
                 ijkPlayerView.setMAutoPlay(1);
             }
         }
+        /* header */
+        if (options.hasKey("headers")) {
+            ReadableMap header = options.getMap("headers");
+            String headerString = "";
+            for (Iterator i = header.getEntryIterator(); i.hasNext();) {
+                Map.Entry<String, Object> obj = (Map.Entry<String, Object>)i.next();
+                String key = obj.getKey();
+                String value = (String)obj.getValue();
+                headerString += key + ": " + value;
+                if (i.hasNext()) {
+                    headerString += "\r\n";
+                }
+            }
+            ijkPlayerView.setHeader(headerString);
+        } else {
+            ijkPlayerView.setHeader(null);
+        }
         /* url */
-        if(options.hasKey("url")){
+        if (options.hasKey("url")) {
             String url = options.getString("url");
             Log.i(TAG,url);
             if (ijkPlayerView.isPlaying()) {
