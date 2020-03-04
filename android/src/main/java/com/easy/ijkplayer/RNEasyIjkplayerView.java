@@ -34,7 +34,6 @@ public class RNEasyIjkplayerView extends SurfaceView implements LifecycleEventLi
     public static WritableMap size = Arguments.createMap();
     private String mCurrUrl;
     private boolean mManualPause;
-    private boolean mManualStop;
     private View parentView;
     private Handler mHandler = new Handler();
     boolean isProgressUpdateRunnableRunning = false;
@@ -70,9 +69,6 @@ public class RNEasyIjkplayerView extends SurfaceView implements LifecycleEventLi
         super(reactContext);
         this.parentView = parentView;
         reactContext.addLifecycleEventListener(this);
-        initIjkMediaPlayer();
-        initSurfaceView();
-        initIjkMediaPlayerListener();
     }
 
     public void dispatchInfoEvent(int infoCode, String info) {
@@ -111,6 +107,8 @@ public class RNEasyIjkplayerView extends SurfaceView implements LifecycleEventLi
 
     private void initIjkMediaPlayer() {
         mIjkPlayer = new IjkMediaPlayer();
+        initIjkMediaPlayerListener();
+        initSurfaceView();
     }
 
 
@@ -230,10 +228,16 @@ public class RNEasyIjkplayerView extends SurfaceView implements LifecycleEventLi
         }
     }
 
+    public boolean shouldRestart() {
+        return mIjkPlayer != null;
+    }
+
     public void restart(String url) {
         stop();
         setDataSource(url);
         resetSurfaceView();
+        mManualPause = false;
+        start();
     }
 
     public void resetSurfaceView() {
@@ -258,11 +262,9 @@ public class RNEasyIjkplayerView extends SurfaceView implements LifecycleEventLi
             mManualPause = false;
         } else {
             setDataSource(mCurrUrl);
-            initIjkMediaPlayerListener();
             initSurfaceView();
             resetSurfaceView();
             mIjkPlayer.prepareAsync();
-            mManualStop = false;
         }
     }
 
@@ -280,8 +282,6 @@ public class RNEasyIjkplayerView extends SurfaceView implements LifecycleEventLi
             dispatchInfoEvent(0, "stop");
             mIjkPlayer.stop();
             mIjkPlayer.reset();
-            mIjkPlayer = null;
-            mManualStop = true;
             stopProgressUpdateRunnableRunning();
         }
     }
@@ -302,7 +302,7 @@ public class RNEasyIjkplayerView extends SurfaceView implements LifecycleEventLi
         try {
             if (mIjkPlayer == null) initIjkMediaPlayer();
             if (header != null) {
-                mIjkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "headers", header != null ? header : "");
+                mIjkPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "headers", header);
             }
             mIjkPlayer.setDataSource(url);
             mCurrUrl = url;
@@ -324,8 +324,10 @@ public class RNEasyIjkplayerView extends SurfaceView implements LifecycleEventLi
     @Override
     public void onHostPause() {
         Log.i(TAG, "onHostPause");
-        mIjkPlayer.pause();
-        stopProgressUpdateRunnableRunning();
+        if (mIjkPlayer.isPlaying()) {
+            mIjkPlayer.pause();
+            stopProgressUpdateRunnableRunning();
+        }
     }
 
     @Override

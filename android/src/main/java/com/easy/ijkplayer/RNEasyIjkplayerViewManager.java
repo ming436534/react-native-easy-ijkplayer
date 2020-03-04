@@ -73,6 +73,10 @@ public class RNEasyIjkplayerViewManager extends SimpleViewManager<FrameLayout> {
     @ReactProp(name = "options")
     public void setOptions(FrameLayout v, ReadableMap options) {
         /* auto start */
+        if (options == null) {
+            ijkPlayerView.stop();
+            return;
+        }
         int autoPlay = 0;
         if(options.hasKey("autoPlay")){
             autoPlay = options.getInt("autoPlay");
@@ -102,7 +106,7 @@ public class RNEasyIjkplayerViewManager extends SimpleViewManager<FrameLayout> {
         if (options.hasKey("url")) {
             String url = options.getString("url");
             Log.i(TAG,url);
-            if (ijkPlayerView.isPlaying()) {
+            if (ijkPlayerView.shouldRestart()) {
                 Log.i(TAG,"isPlaying");
                 ijkPlayerView.restart(url);
             } else {
