@@ -29,7 +29,11 @@
         
         NSString *urlString = [json objectForKey:@"url"];
         if(urlString){
+          if ([urlString hasPrefix:@"http"]) {
             view.url = [NSURL URLWithString:urlString];
+          } else {
+            view.url = [NSURL fileURLWithPath:urlString];
+          }
         }
         view.autoPlay= [json objectForKey:@"autoPlay"] ? [json objectForKey:@"autoPlay"] : @0    ;
         
