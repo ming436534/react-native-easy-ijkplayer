@@ -25,7 +25,14 @@
         }
         return self;
     }
-
+    
+    - (void)setUrl:(NSURL *)url {
+      _url = url;
+      if (_player) {
+        [self stop];
+        [self play];
+      }
+    }
 
 
     -(void)play{
