@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 
 
   s.dependency "React"
-  s.dependency 'ijkplayerssl', '~> 1.1.3'
+  s.dependency 'ijkplayer', :git => 'https://gitlab.com/terencelee1234/ijkplayerwithssl2.git'
   #s.dependency "others"
 
 end
